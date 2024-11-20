@@ -19,9 +19,9 @@ int main(){
     }
 
     /* preenche os valores do puzzle */
-    for(int i = 0; i < puzzle_size; i++) cin >> puzzle[i];
+    for(int i = 0; i < puzzle_size; i++) scanf("%d", &puzzle[i]);
 
-    cin >> intended_result; /* o resultado pretendido no puzzle */
+    scanf("%d", &intended_result); /* o resultado pretendido no puzzle */
 
     /* Abaixo são só testes para verificar o output */
 
