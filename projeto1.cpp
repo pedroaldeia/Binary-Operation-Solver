@@ -15,7 +15,7 @@ int main(){
     /* preenche a matriz com os valores dados no input */
     for(int i = 0; i < matrix_size; i++){
         for(int j = 0; j < matrix_size; j++)
-            cin >> matrix[i][j];
+            scanf("%d", &matrix[i][j]);
     }
 
     /* preenche os valores do puzzle */
