@@ -2,10 +2,23 @@
 #include <vector>
 using namespace std;
 
+char FILENAME[13] = "filename.txt";
+int BUFFER = 256;
+
 int main(){
     int intended_result, matrix_size, puzzle_size; /* vão ser definidos no input */
+    FILE *file;
+    char line[BUFFER];
+    char* ptr;
 
-    scanf("%d %d", &matrix_size, &puzzle_size);
+    file = fopen(FILENAME, "r");
+    if (file == NULL) {
+        perror("Unable to open file");
+        return 1;
+    }
+    
+    fgets(line, sizeof(line), file);
+    sscanf(line, "%d %d", &matrix_size, &puzzle_size);
 
     /* preenche o vetor com vetores de tamanho matrix_size */
     vector<vector<int>> matrix(matrix_size, vector<int>(matrix_size)); 
@@ -14,14 +27,29 @@ int main(){
 
     /* preenche a matriz com os valores dados no input */
     for(int i = 0; i < matrix_size; i++){
-        for(int j = 0; j < matrix_size; j++)
-            scanf("%d", &matrix[i][j]);
+        fgets(line, sizeof(line), file);
+        ptr = line;
+        int j = 0;
+        for(; j < matrix_size; j++){
+            sscanf(ptr, "%d", &matrix[i][j]);
+            while(*ptr != ' ' && *ptr != '\0') ptr++; 
+            ptr++;
+        }
     }
 
     /* preenche os valores do puzzle */
-    for(int i = 0; i < puzzle_size; i++) scanf("%d", &puzzle[i]);
+    fgets(line, sizeof(line), file);
+    ptr = line;
+    for(int i = 0; i < puzzle_size; i++){
+        sscanf(ptr, "%d", &puzzle[i]);
+        cout << puzzle[i];
+        while(*ptr != ' ' && *ptr != '\0') ptr++;
+        ptr++;
+    } 
 
-    scanf("%d", &intended_result); /* o resultado pretendido no puzzle */
+    fgets(line, sizeof(line), file);
+    sscanf(line, "%d", &intended_result); /* o resultado pretendido no puzzle */
+
 
     /* Abaixo são só testes para verificar o output */
 
@@ -37,9 +65,8 @@ int main(){
     }
 
     cout << "The entered puzzle is:" << endl;
-    for (const auto& i : puzzle) {
-        cout << puzzle[i] << " ";
-    }
+    for(int i = 0; i< puzzle_size; i++) cout << puzzle[i] << " ";
+    
 
     cout << endl << "The entered puzzle result: " << intended_result << endl;
     
