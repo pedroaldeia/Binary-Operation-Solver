@@ -51,6 +51,21 @@ int main(){
     sscanf(line, "%d", &intended_result); /* o resultado pretendido no puzzle */
 
 
+    /* A tabela do puzzle tem 3 dimensões, duas de posição, uma para guardar os valores possíveis */
+    vector<vector<vector<int>>> values_table(puzzle_size, vector<vector<int>>(puzzle_size));
+
+    /* Preenche os valores da maior diagonal com o próprio número */
+    for(int i=0; i < puzzle_size; i++) values_table[i][i].push_back(i);
+
+    /* Preenche os valores da segunda diagonal com os valores da tabela */
+    for(int i=0; i < puzzle_size -1; i++) values_table[i][i+1].push_back(matrix[i][i+1]);
+
+    /* Loop grande que preenche o resto dos valores */
+
+
+
+    
+
     /* Abaixo são só testes para verificar o output */
 
     cout << "The entered matrix size: " << matrix_size << endl;
