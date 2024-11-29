@@ -57,10 +57,10 @@ int main(){
     vector<vector<vector<int>>> values_table(puzzle_size, vector<vector<int>>(puzzle_size));
 
     /* Preenche os valores da maior diagonal com o próprio número */
-    for(int i=0; i < puzzle_size; i++) values_table[i][i].push_back(i);
+    for(int i=0; i < puzzle_size; i++) values_table[i][i].push_back(puzzle[i]);
 
     /* Preenche os valores da segunda diagonal com os valores da tabela */
-    for(int i=0; i < puzzle_size -1; i++) values_table[i][i+1].push_back(matrix[i][i+1]);
+    for(int i=0; i < puzzle_size -1; i++) values_table[i][i+1].push_back(matrix[puzzle[i]-1][puzzle[i+1]-1]);
 
     /* Loop grande que preenche o resto dos valores */
 
@@ -87,23 +87,24 @@ int main(){
                     /* itera sobre os valores contidos na célula da mesma coluna */
                     for(int col_values_iterator = 0; col_values_iterator < celula_linha.size() && cell.size() <= matrix_size; col_values_iterator++){
                         /* calcula o novo valor da célula */
-                        int value = matrix[celula_linha[line_values_iterator]][celula_coluna[col_values_iterator]];
+                        int value = matrix[celula_linha[line_values_iterator]-1][celula_coluna[col_values_iterator]-1];
                         
                         /* verifica se o valor já está contido no vetor de soluções da célula */
-                        if(any_of(cell.begin(), cell.end(), [value](int x){ return x == value;})){
+                        if(!any_of(cell.begin(), cell.end(), [value](int x){ return x == value;})){
                             cell.push_back(value);
                         }
                         /* verifica se o resultado final é sasfeito*/
-                        if(diagonal == puzzle_size-1 && value == intended_result)
+                        if(diagonal == puzzle_size-1 && value == intended_result){
                             printf("YAY, chegaste ao resultado");
                             output = true;
+                        }
                     }
                 }
             }
         }
     }
 
-    
+    // guardar a posição do parentesis e os valores obtidos as sub operações, ex: (2 2)3 -> guardar valor de 2+2, 3 e a posição do parentesis (2)
 
     /* Abaixo são só testes para verificar o output */
 
