@@ -79,16 +79,16 @@ int main(){
             for(int table_searcher = 1; table_searcher <= diagonal; table_searcher++){
 
                 /* vão ser cada célula das linhas e colunas da célula que queremos calcular */
-                vector<int> celula_coluna = values_table[column-table_searcher+1][column];
-                vector<int> celula_linha = values_table[line][column-table_searcher];
+                vector<int> line_cell = values_table[line][column-table_searcher];
+                vector<int> column_cell = values_table[column-table_searcher+1][column];
 
                 /* itera sobre os valores contidos na célula da mesma linha */
-                for(int line_values_iterator = 0; line_values_iterator < (int) celula_linha.size() && (int) values_table[line][column].size() <= matrix_size && !output; line_values_iterator++){
+                for(int line_values_iterator = 0; line_values_iterator < (int) line_cell.size() && (int) values_table[line][column].size() <= matrix_size && !output; line_values_iterator++){
 
                     /* itera sobre os valores contidos na célula da mesma coluna */
-                    for(int col_values_iterator = 0; col_values_iterator < (int) celula_coluna.size() && (int) values_table[line][column].size() <= matrix_size && !output; col_values_iterator++){
+                    for(int col_values_iterator = 0; col_values_iterator < (int) column_cell.size() && (int) values_table[line][column].size() <= matrix_size && !output; col_values_iterator++){
                         /* calcula o novo valor da célula */
-                        int value = matrix[celula_linha[line_values_iterator]-1][celula_coluna[col_values_iterator]-1];
+                        int value = matrix[line_cell[line_values_iterator]-1][column_cell[col_values_iterator]-1];
                         
                         /* verifica se o valor já está contido no vetor de soluções da célula */
                         if(!any_of(values_table[line][column].begin(), values_table[line][column].end(), [value](int x){ return x == value;})){
@@ -96,7 +96,7 @@ int main(){
                         }
                         /* verifica se o resultado final é sasfeito*/
                         if(diagonal == puzzle_size-1 && value == intended_result){
-                            printf("YAY, chegaste ao resultado\n");
+                            printf("YAY, chegaste ao resultado:\n");
                             output = true;
                         }
                     }
@@ -130,7 +130,7 @@ int main(){
 
     */
 
-    if(output) cout << "true\n";
+    if(output) cout << values_table[0][puzzle_size-1][values_table[0][puzzle_size-1].size()-1] << endl;
     else cout << "false\n";   
 
     return 0;
