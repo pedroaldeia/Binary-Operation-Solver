@@ -7,20 +7,14 @@ char FILENAME[13] = "filename.txt";
 int BUFFER = 256;
 
 int main(){
+    std::ios::sync_with_stdio(0);
+    std::cin.tie(0);
+
     int intended_result, matrix_size, puzzle_size; /* vão ser definidos no input */
-    FILE *file;
-    char line[BUFFER];
-    char* ptr;
     bool output = false;
 
-    file = fopen(FILENAME, "r");
-    if (file == NULL) {
-        perror("Unable to open file");
-        return 1;
-    }
-    
-    if(fgets(line, sizeof(line), file) != nullptr)
-        sscanf(line, "%d %d", &matrix_size, &puzzle_size);
+    cin >> matrix_size;
+    cin >> puzzle_size;
 
     /* preenche o vetor com vetores de tamanho matrix_size */
     vector<vector<int>> matrix(matrix_size, vector<int>(matrix_size)); 
@@ -29,30 +23,19 @@ int main(){
 
     /* preenche a matriz com os valores dados no input */
     for(int i = 0; i < matrix_size; i++){
-        if(fgets(line, sizeof(line), file) != nullptr){
-            ptr = line;
-            int j = 0;
-            for(; j < matrix_size; j++){
-                sscanf(ptr, "%d", &matrix[i][j]);
-                while(*ptr != ' ' && *ptr != '\0') ptr++; 
-                ptr++;
-        }
-        
+        int j = 0;
+        for(; j < matrix_size; j++){
+            cin >> matrix[i][j];
         }
     }
 
     /* preenche os valores do puzzle */
-    if(fgets(line, sizeof(line), file) != nullptr){
-        ptr = line;
-        for(int i = 0; i < puzzle_size; i++){
-            sscanf(ptr, "%d", &puzzle[i]);
-            while(*ptr != ' ' && *ptr != '\0') ptr++;
-            ptr++;
-        } 
-    }
+    
+    for(int i = 0; i < puzzle_size; i++){
+        cin >> puzzle[i];
+    } 
 
-    if(fgets(line, sizeof(line), file) != nullptr)
-        sscanf(line, "%d", &intended_result); /* o resultado pretendido no puzzle */
+    cin >> intended_result; /* o resultado pretendido no puzzle */
 
 
     /* A tabela do puzzle tem 3 dimensões, duas de posição, uma para guardar os valores possíveis */
