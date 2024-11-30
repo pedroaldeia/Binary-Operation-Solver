@@ -19,8 +19,8 @@ int main(){
         return 1;
     }
     
-    fgets(line, sizeof(line), file);
-    sscanf(line, "%d %d", &matrix_size, &puzzle_size);
+    if(fgets(line, sizeof(line), file) != nullptr)
+        sscanf(line, "%d %d", &matrix_size, &puzzle_size);
 
     /* preenche o vetor com vetores de tamanho matrix_size */
     vector<vector<int>> matrix(matrix_size, vector<int>(matrix_size)); 
@@ -29,27 +29,30 @@ int main(){
 
     /* preenche a matriz com os valores dados no input */
     for(int i = 0; i < matrix_size; i++){
-        fgets(line, sizeof(line), file);
-        ptr = line;
-        int j = 0;
-        for(; j < matrix_size; j++){
-            sscanf(ptr, "%d", &matrix[i][j]);
-            while(*ptr != ' ' && *ptr != '\0') ptr++; 
-            ptr++;
+        if(fgets(line, sizeof(line), file) != nullptr){
+            ptr = line;
+            int j = 0;
+            for(; j < matrix_size; j++){
+                sscanf(ptr, "%d", &matrix[i][j]);
+                while(*ptr != ' ' && *ptr != '\0') ptr++; 
+                ptr++;
+        }
+        
         }
     }
 
     /* preenche os valores do puzzle */
-    fgets(line, sizeof(line), file);
-    ptr = line;
-    for(int i = 0; i < puzzle_size; i++){
-        sscanf(ptr, "%d", &puzzle[i]);
-        while(*ptr != ' ' && *ptr != '\0') ptr++;
-        ptr++;
-    } 
+    if(fgets(line, sizeof(line), file) != nullptr){
+        ptr = line;
+        for(int i = 0; i < puzzle_size; i++){
+            sscanf(ptr, "%d", &puzzle[i]);
+            while(*ptr != ' ' && *ptr != '\0') ptr++;
+            ptr++;
+        } 
+    }
 
-    fgets(line, sizeof(line), file);
-    sscanf(line, "%d", &intended_result); /* o resultado pretendido no puzzle */
+    if(fgets(line, sizeof(line), file) != nullptr)
+        sscanf(line, "%d", &intended_result); /* o resultado pretendido no puzzle */
 
 
     /* A tabela do puzzle tem 3 dimensões, duas de posição, uma para guardar os valores possíveis */
@@ -80,10 +83,10 @@ int main(){
                 vector<int> celula_linha = values_table[line][column-table_searcher];
 
                 /* itera sobre os valores contidos na célula da mesma linha */
-                for(int line_values_iterator = 0; line_values_iterator < celula_linha.size() && values_table[line][column].size() <= matrix_size && !output; line_values_iterator++){
+                for(int line_values_iterator = 0; line_values_iterator < (int) celula_linha.size() && (int) values_table[line][column].size() <= matrix_size && !output; line_values_iterator++){
 
                     /* itera sobre os valores contidos na célula da mesma coluna */
-                    for(int col_values_iterator = 0; col_values_iterator < celula_coluna.size() && values_table[line][column].size() <= matrix_size && !output; col_values_iterator++){
+                    for(int col_values_iterator = 0; col_values_iterator < (int) celula_coluna.size() && (int) values_table[line][column].size() <= matrix_size && !output; col_values_iterator++){
                         /* calcula o novo valor da célula */
                         int value = matrix[celula_linha[line_values_iterator]-1][celula_coluna[col_values_iterator]-1];
                         
