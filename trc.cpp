@@ -8,12 +8,11 @@ string trc(const vector<vector<vector<vector<int>>>>& matrix,
             int value, string ans, int i, int j, 
             bool left, vector<int>& seq) {
     if (i==j) {
-        if (left) {return "(" + seq[j-1];}
-        else {return seq[j-1] + ")";}
+        if (left) {return "(" + to_string(seq[j-1]);}
+        else {return to_string(seq[j-1]) + ")";}
     }
-
-    vector<int> values = matrix[i][j][0];
-    vector<int> b = matrix[i][j][1];
+    vector<int> values = matrix[i-1][j-1][0];
+    vector<int> b = matrix[i-1][j-1][1];
     int x = 1;
     while (values[x-1]!=value) {
         x++;
@@ -21,37 +20,46 @@ string trc(const vector<vector<vector<vector<int>>>>& matrix,
     int left_value = b[3*(x-1)];
     int right_value = b[3*(x-1)+1];
     int bracket = b[3*(x-1)+2];
-    return trc(matrix, left_value, ans, i, bracket-1, true, seq) + " " + 
+    return trc(matrix, left_value, ans, i, bracket, true, seq) + " " + 
         trc(matrix, right_value, ans, bracket+1, j, false, seq);
 
 }
 
 int main() {
-    vector<vector<vector<vector<int>>>> matrix;
+    
+    std::vector<std::vector<std::vector<std::vector<int>>>> matrix(
+        4, std::vector<std::vector<std::vector<int>>>(
+               4, std::vector<std::vector<int>>(
+                      2, std::vector<int>())));
 
-    matrix[0][0][0] = {2};
+    // Assign values to the matrix
+    
+    
+    matrix[0][0][0] = {1};
     matrix[0][1][0] = {2};
-    matrix[0][2][0] = {1, 2};
-    matrix[1][0][0] = {2};
+    matrix[0][2][0] = {1};
+    matrix[0][3][0] = {1};
     matrix[1][1][0] = {2};
-    matrix[1][2][0] = {1, 2};
-    matrix[2][0][0] = {2};
-    matrix[2][1][0] = {2};
-    matrix[2][2][0] = {1, 2};
+    matrix[1][2][0] = {1};
+    matrix[1][3][0] = {1};
+    matrix[2][2][0] = {2};
+    matrix[2][3][0] = {2};
+    matrix[3][3][0] = {1};
 
-    matrix[0][0][1] = {2, 3, 2, 1};
-    matrix[0][1][1] = {2, 3, 2, 1};
-    matrix[0][2][1] = {2, 3, 2, 1};
-    matrix[1][0][1] = {2};
-    matrix[1][1][1] = {2};
-    matrix[1][2][1] = {1, 2};
-    matrix[2][0][1] = {2};
-    matrix[2][1][1] = {2};
+    matrix[0][1][1] = {1, 2, 1};
+    matrix[0][2][1] = {2, 2, 2};
+    matrix[0][3][1] = {1, 1, 3};
+    matrix[1][2][1] = {2, 2, 2};
+    matrix[1][3][1] = {1, 1, 3};
+    matrix[2][3][1] = {2, 1, 3};
+    
+   
 
 
-    vector<int> problem = {2, 2, 2, 2, 1, 3};
+    vector<int> problem = {1, 2, 2, 1};
  
-    cout << trc(matrix, 2, "", 1, 6, true, problem);
+    cout << trc(matrix, 1, "", 1, 4, true, problem) << endl;
+
 
     return 0;
 }
