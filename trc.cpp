@@ -27,10 +27,10 @@ string trc(const vector<vector<vector<vector<int>>>>& matrix,
 
 int main() {
     
-    std::vector<std::vector<std::vector<std::vector<int>>>> matrix(
-        4, std::vector<std::vector<std::vector<int>>>(
-               4, std::vector<std::vector<int>>(
-                      2, std::vector<int>())));
+    vector<vector<vector<vector<int>>>> matrix(
+        4, vector<vector<vector<int>>>(
+               4, vector<vector<int>>(
+                      2, vector<int>())));
 
     // Assign values to the matrix
     

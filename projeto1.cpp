@@ -1,10 +1,32 @@
 #include <iostream>
 #include <vector>
+#include <string>
 #include <algorithm>
 using namespace std;
 
 char FILENAME[13] = "filename.txt";
 int BUFFER = 256;
+
+string trc(const vector<vector<vector<vector<int>>>>& matrix,
+            int value, string ans, int i, int j, 
+            bool left, vector<int>& seq) {
+    if (i==j) {
+        if (left) {return "(" + to_string(seq[j-1]);}
+        else {return to_string(seq[j-1]) + ")";}
+    }
+    vector<int> values = matrix[i-1][j-1][0];
+    vector<int> b = matrix[i-1][j-1][1];
+    int x = 1;
+    while (values[x-1]!=value) {
+        x++;
+    }
+    int left_value = b[3*(x-1)];
+    int right_value = b[3*(x-1)+1];
+    int bracket = b[3*(x-1)+2];
+    return trc(matrix, left_value, ans, i, bracket, true, seq) + " " + 
+        trc(matrix, right_value, ans, bracket+1, j, false, seq);
+
+}
 
 int main(){
     std::ios::sync_with_stdio(0);
@@ -37,15 +59,17 @@ int main(){
 
     cin >> intended_result; /* o resultado pretendido no puzzle */
 
-
     /* A tabela do puzzle tem 3 dimensões, duas de posição, uma para guardar os valores possíveis */
-    vector<vector<vector<int>>> values_table(puzzle_size, vector<vector<int>>(puzzle_size));
+    vector<vector<vector<vector<int>>>> values_table(
+        puzzle_size, vector<vector<vector<int>>>(
+        puzzle_size, vector<vector<int>>(
+        2, vector<int>())));
 
     /* Preenche os valores da maior diagonal com o próprio número */
-    for(int i=0; i < puzzle_size; i++) values_table[i][i].push_back(puzzle[i]);
+    for(int i=0; i < puzzle_size; i++) values_table[i][i][0].push_back(puzzle[i]);
 
     /* Preenche os valores da segunda diagonal com os valores da tabela */
-    for(int i=0; i < puzzle_size -1; i++) values_table[i][i+1].push_back(matrix[puzzle[i]-1][puzzle[i+1]-1]);
+    for(int i=0; i < puzzle_size -1; i++) values_table[i][i+1][0].push_back(matrix[puzzle[i]-1][puzzle[i+1]-1]);
 
     /* Loop grande que preenche o resto dos valores */
 
@@ -62,20 +86,20 @@ int main(){
             for(int table_searcher = 1; table_searcher <= diagonal; table_searcher++){
 
                 /* vão ser cada célula das linhas e colunas da célula que queremos calcular */
-                vector<int> line_cell = values_table[line][column-table_searcher];
-                vector<int> column_cell = values_table[column-table_searcher+1][column];
+                vector<int> line_cell = values_table[line][column-table_searcher][0];
+                vector<int> column_cell = values_table[column-table_searcher+1][column][0];
 
                 /* itera sobre os valores contidos na célula da mesma linha */
-                for(int line_values_iterator = 0; line_values_iterator < (int) line_cell.size() && (int) values_table[line][column].size() <= matrix_size && !output; line_values_iterator++){
+                for(int line_values_iterator = 0; line_values_iterator < (int) line_cell.size() && (int) values_table[line][column][0].size() <= matrix_size && !output; line_values_iterator++){
 
                     /* itera sobre os valores contidos na célula da mesma coluna */
-                    for(int col_values_iterator = 0; col_values_iterator < (int) column_cell.size() && (int) values_table[line][column].size() <= matrix_size && !output; col_values_iterator++){
+                    for(int col_values_iterator = 0; col_values_iterator < (int) column_cell.size() && (int) values_table[line][column][0].size() <= matrix_size && !output; col_values_iterator++){
                         /* calcula o novo valor da célula */
                         int value = matrix[line_cell[line_values_iterator]-1][column_cell[col_values_iterator]-1];
                         
                         /* verifica se o valor já está contido no vetor de soluções da célula */
-                        if(!any_of(values_table[line][column].begin(), values_table[line][column].end(), [value](int x){ return x == value;})){
-                            values_table[line][column].push_back(value);
+                        if(!any_of(values_table[line][column][0].begin(), values_table[line][column][0].end(), [value](int x){ return x == value;})){
+                            values_table[line][column][0].push_back(value);
                         }
                         /* verifica se o resultado final é sasfeito*/
                         if(diagonal == puzzle_size-1 && value == intended_result){
@@ -113,8 +137,12 @@ int main(){
 
     */
 
-    if(output) cout << values_table[0][puzzle_size-1][values_table[0][puzzle_size-1].size()-1] << endl;
-    else cout << "false\n";   
+    //if(output) cout << values_table[0][puzzle_size-1][values_table[0][puzzle_size-1][0].size()-1] << endl;
+    //else cout << "false\n";   
+
+    cout << trc(values_table, intended_result, "", 1, matrix_size, true, puzzle) << endl;
+
+    
 
     return 0;
 }
