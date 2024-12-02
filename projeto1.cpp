@@ -11,7 +11,7 @@ string trc(const vector<vector<vector<vector<int>>>>& matrix,
             int value, string ans, int i, int j, 
             bool left, vector<int>& seq) {
     if (i==j) {
-        if (left) {return "(" + to_string(seq[j-1]);}
+        if (left) {return to_string(seq[j-1]);}
         else {return to_string(seq[j-1]) + ")";}
     }
     vector<int> values = matrix[i-1][j-1][0];
@@ -23,7 +23,7 @@ string trc(const vector<vector<vector<vector<int>>>>& matrix,
     int left_value = b[3*(x-1)];
     int right_value = b[3*(x-1)+1];
     int bracket = b[3*(x-1)+2];
-    return trc(matrix, left_value, ans, i, bracket, true, seq) + " " + 
+    return "(" + trc(matrix, left_value, ans, i, bracket, true, seq) + " " + 
         trc(matrix, right_value, ans, bracket+1, j, false, seq);
 
 }
