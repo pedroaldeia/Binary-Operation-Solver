@@ -117,6 +117,10 @@ int main(){
                             //printf("YAY, chegaste ao resultado:\n");
                             output = true;
                         }
+                        else if (diagonal == puzzle_size-1 && value != intended_result) {
+                            cout << 0 << endl;
+                            return 0;
+                        }
                     }
                 }
             }
@@ -150,7 +154,7 @@ int main(){
 
     //if(output) cout << values_table[0][puzzle_size-1][values_table[0][puzzle_size-1][0].size()-1] << endl;
     //else cout << "false\n";   
-
+    cout << 1 << endl;
     cout << trc(values_table, intended_result, "", 1, puzzle_size, true, puzzle) << endl;
 
     

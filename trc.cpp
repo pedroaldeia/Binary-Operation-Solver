@@ -57,7 +57,7 @@ int main() {
 
 
     vector<int> problem = {1, 2, 2, 1};
- 
+    cout << 1 << endl;
     cout << trc(matrix, 1, "", 1, 4, true, problem) << endl;
 
 
