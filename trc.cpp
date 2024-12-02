@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <chrono>
 #include <vector>
 
 using namespace std;
@@ -26,6 +27,8 @@ string trc(const vector<vector<vector<vector<int>>>>& matrix,
 }
 
 int main() {
+
+    auto start = std::chrono::high_resolution_clock::now();
     
     vector<vector<vector<vector<int>>>> matrix(
         4, vector<vector<vector<int>>>(
@@ -60,7 +63,10 @@ int main() {
     cout << 1 << endl;
     cout << trc(matrix, 1, "", 1, 4, true, problem) << endl;
 
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
 
+    std::cout << "Elapsed time: " << elapsed.count() << " seconds\n";
     return 0;
 }
 
