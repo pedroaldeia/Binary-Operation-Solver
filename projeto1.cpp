@@ -69,7 +69,12 @@ int main(){
     for(int i=0; i < puzzle_size; i++) values_table[i][i][0].push_back(puzzle[i]);
 
     /* Preenche os valores da segunda diagonal com os valores da tabela */
-    for(int i=0; i < puzzle_size -1; i++) values_table[i][i+1][0].push_back(matrix[puzzle[i]-1][puzzle[i+1]-1]);
+    for(int i=0; i < puzzle_size -1; i++) {
+        values_table[i][i+1][0].push_back(matrix[puzzle[i]-1][puzzle[i+1]-1]);
+        values_table[i][i+1][1].push_back(puzzle[i]);
+        values_table[i][i+1][1].push_back(puzzle[i+1]);
+        values_table[i][i+1][1].push_back(i+1);
+    }
 
     /* Loop grande que preenche o resto dos valores */
 
@@ -95,15 +100,21 @@ int main(){
                     /* itera sobre os valores contidos na célula da mesma coluna */
                     for(int col_values_iterator = 0; col_values_iterator < (int) column_cell.size() && (int) values_table[line][column][0].size() <= matrix_size && !output; col_values_iterator++){
                         /* calcula o novo valor da célula */
-                        int value = matrix[line_cell[line_values_iterator]-1][column_cell[col_values_iterator]-1];
+                        int left_value = line_cell[line_values_iterator];
+                        int right_value = column_cell[col_values_iterator];
+                        int value = matrix[left_value-1][right_value-1];
                         
                         /* verifica se o valor já está contido no vetor de soluções da célula */
                         if(!any_of(values_table[line][column][0].begin(), values_table[line][column][0].end(), [value](int x){ return x == value;})){
                             values_table[line][column][0].push_back(value);
+                            //vector<int> &trace_info = values_table[line][column][1];
+                            values_table[line][column][1].push_back(left_value);
+                            values_table[line][column][1].push_back(right_value);
+                            values_table[line][column][1].push_back(column);
                         }
                         /* verifica se o resultado final é sasfeito*/
                         if(diagonal == puzzle_size-1 && value == intended_result){
-                            printf("YAY, chegaste ao resultado:\n");
+                            //printf("YAY, chegaste ao resultado:\n");
                             output = true;
                         }
                     }
@@ -140,7 +151,7 @@ int main(){
     //if(output) cout << values_table[0][puzzle_size-1][values_table[0][puzzle_size-1][0].size()-1] << endl;
     //else cout << "false\n";   
 
-    cout << trc(values_table, intended_result, "", 1, matrix_size, true, puzzle) << endl;
+    cout << trc(values_table, intended_result, "", 1, puzzle_size, true, puzzle) << endl;
 
     
 
