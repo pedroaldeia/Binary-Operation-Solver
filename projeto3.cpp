@@ -46,6 +46,8 @@ int main(){
 
     vector<int> puzzle(puzzle_size);
 
+    bool has_num_in_cell[matrix_size+1] = {false};
+
     /* preenche a matriz com os valores dados no input */
     for(int i = 0; i < matrix_size; i++){
         int j = 0;
@@ -116,9 +118,10 @@ int main(){
                         int value = matrix[left_value-1][right_value-1];
                         
                         /* verifica se o valor já está contido no vetor de soluções da célula */
-                        vector<int> &cell_values = values_table[line][column][0];
-                        if(!any_of(cell_values.begin(), cell_values.end(), [value](int x){ return x == value;})){
+                        if(!has_num_in_cell[value]){
                             current_values.push_back(value);
+                            has_num_in_cell[value] = true;
+
                             current_info.push_back(left_value);
                             current_info.push_back(right_value);
                             current_info.push_back(column - table_searcher + 1);
@@ -130,6 +133,7 @@ int main(){
                         }
                     }
                 }
+                for(int v : current_values) has_num_in_cell[v] = false;
             }
         }
     }
