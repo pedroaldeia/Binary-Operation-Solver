@@ -46,7 +46,8 @@ int main(){
 
     vector<int> puzzle(puzzle_size);
 
-    bool has_num_in_cell[matrix_size+1] = {false};
+    bool has_num_in_cell[matrix_size+1];
+    fill_n(has_num_in_cell, matrix_size+1, false);
 
     /* preenche a matriz com os valores dados no input */
     for(int i = 0; i < matrix_size; i++){
@@ -150,4 +151,4 @@ int main(){
     //std::cout << "Elapsed time: " << elapsed.count() << " seconds\n";
     return 0;
 }
-//blablablabla
+//blablabla

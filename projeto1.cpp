@@ -2,6 +2,8 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <chrono>
+
 using namespace std;
 
 char FILENAME[13] = "filename.txt";
@@ -29,6 +31,7 @@ string trc(const vector<vector<vector<vector<int>>>>& matrix,
 }
 
 int main(){
+
     std::ios::sync_with_stdio(0);
     std::cin.tie(0);
 
@@ -58,6 +61,7 @@ int main(){
     } 
 
     cin >> intended_result; /* o resultado pretendido no puzzle */
+    //auto start = std::chrono::high_resolution_clock::now();
 
     /* A tabela do puzzle tem 3 dimensões, duas de posição, uma para guardar os valores possíveis */
     vector<vector<vector<vector<int>>>> values_table(
@@ -87,30 +91,38 @@ int main(){
             /* vai buscar a celula para ser preenchida */
             int column = diagonal + line;
 
+            vector<vector<int>> &current_cell = values_table[line][column];
+            vector<int> &current_values = current_cell[0];
+            vector<int> &current_info = current_cell[1];
+
             /* itera sobre as linhas e colunas para calcular o resultado da celula */
             for(int table_searcher = 1; table_searcher <= diagonal && (int) values_table[line][column][0].size() <= matrix_size; table_searcher++){
 
                 /* vão ser cada célula das linhas e colunas da célula que queremos calcular */
                 vector<int> line_cell = values_table[line][column-table_searcher][0];
                 vector<int> column_cell = values_table[column-table_searcher+1][column][0];
+                int line_cell_size = (int)line_cell.size();
+                int column_cell_size = (int)column_cell.size();
+                
 
                 /* itera sobre os valores contidos na célula da mesma linha */
-                for(int line_values_iterator = 0; line_values_iterator < (int) line_cell.size() && (int) values_table[line][column][0].size() <= matrix_size && !output; line_values_iterator++){
+                for(int line_values_iterator = 0; line_values_iterator < line_cell_size && (int) current_values.size() <= matrix_size && !output; line_values_iterator++){
 
                     /* itera sobre os valores contidos na célula da mesma coluna */
-                    for(int col_values_iterator = 0; col_values_iterator < (int) column_cell.size() && (int) values_table[line][column][0].size() <= matrix_size && !output; col_values_iterator++){
+                    for(int col_values_iterator = 0; col_values_iterator < column_cell_size && (int) current_values.size() <= matrix_size && !output; col_values_iterator++){
                         /* calcula o novo valor da célula */
                         int left_value = line_cell[line_values_iterator];
                         int right_value = column_cell[col_values_iterator];
                         int value = matrix[left_value-1][right_value-1];
                         
                         /* verifica se o valor já está contido no vetor de soluções da célula */
+                        //vector<int> cell_values = values_table[line][column][0];
                         if(!any_of(values_table[line][column][0].begin(), values_table[line][column][0].end(), [value](int x){ return x == value;})){
-                            values_table[line][column][0].push_back(value);
+                            current_values.push_back(value);
                             //vector<int> &trace_info = values_table[line][column][1];
-                            values_table[line][column][1].push_back(left_value);
-                            values_table[line][column][1].push_back(right_value);
-                            values_table[line][column][1].push_back(column - table_searcher + 1);
+                            current_info.push_back(left_value);
+                            current_info.push_back(right_value);
+                            current_info.push_back(column - table_searcher + 1);
                         }
                         /* verifica se o resultado final é sasfeito*/
                         if(diagonal == puzzle_size-1 && value == intended_result){
@@ -123,39 +135,16 @@ int main(){
         }
     }
 
-    // guardar a posição do parentesis e os valores obtidos as sub operações, ex: (2 2)3 -> guardar valor de 2+2, 3 e a posição do parentesis (2)
-
-    /* Abaixo são só testes para verificar o output */
-
-    /*
-
-    cout << "The entered matrix size: " << matrix_size << endl;
-    cout << "The entered puzzle size: " << puzzle_size << endl;
-
-    cout << "The entered matrix is:\n";
-    for (const auto& row : matrix) {
-        for (int value : row) {
-            cout << value << " ";
-        }
-        cout << "\n";
-    }
-
-    cout << "The entered puzzle is:" << endl;
-    for(int i = 0; i< puzzle_size; i++) cout << puzzle[i] << " ";
-    
-
-    cout << endl << "The entered puzzle result: " << intended_result << endl;
-
-    */
-
-    //if(output) cout << values_table[0][puzzle_size-1][values_table[0][puzzle_size-1][0].size()-1] << endl;
-    //else cout << "false\n";   
     if (!output) {
         cout << 0 << endl; 
         return 0;}
     cout << 1 << endl;
     cout << trc(values_table, intended_result, "", 1, puzzle_size, true, puzzle) << endl;
 
+    //auto end = std::chrono::high_resolution_clock::now();
+    //std::chrono::duration<double> elapsed = end - start;
+
+    //std::cout << "Elapsed time: " << elapsed.count() << " seconds\n";
     return 0;
 }
 //blablabla
