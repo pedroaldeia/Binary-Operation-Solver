@@ -64,7 +64,7 @@ int main(){
     } 
 
     cin >> intended_result; /* o resultado pretendido no puzzle */
-    //auto start = std::chrono::high_resolution_clock::now();
+    auto start = std::chrono::high_resolution_clock::now();
 
     /* A tabela do puzzle tem 3 dimensões, duas de posição, uma para guardar os valores possíveis */
     vector<vector<vector<vector<int>>>> values_table(
@@ -145,10 +145,10 @@ int main(){
     cout << 1 << endl;
     cout << trc(values_table, intended_result, "", 1, puzzle_size, true, puzzle) << endl;
 
-    //auto end = std::chrono::high_resolution_clock::now();
-    //std::chrono::duration<double> elapsed = end - start;
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
 
-    //std::cout << "Elapsed time: " << elapsed.count() << " seconds\n";
+    std::cout << "Elapsed time: " << elapsed.count() << " seconds\n";
     return 0;
 }
 //blablabla

@@ -62,6 +62,11 @@ int main(){
 
     cin >> intended_result; /* o resultado pretendido no puzzle */
     //auto start = std::chrono::high_resolution_clock::now();
+    if (puzzle.size() == 1 && puzzle[0] == intended_result) {
+        cout << 1 <<endl;
+        cout << puzzle[0] << endl;
+        return 0;
+    }
 
     /* A tabela do puzzle tem 3 dimensões, duas de posição, uma para guardar os valores possíveis */
     vector<vector<vector<vector<int>>>> values_table(
@@ -72,18 +77,10 @@ int main(){
     /* Preenche os valores da maior diagonal com o próprio número */
     for(int i=0; i < puzzle_size; i++) values_table[i][i][0].push_back(puzzle[i]);
 
-    /* Preenche os valores da segunda diagonal com os valores da tabela */
-    for(int i=0; i < puzzle_size -1; i++) {
-        values_table[i][i+1][0].push_back(matrix[puzzle[i]-1][puzzle[i+1]-1]);
-        values_table[i][i+1][1].push_back(puzzle[i]);
-        values_table[i][i+1][1].push_back(puzzle[i+1]);
-        values_table[i][i+1][1].push_back(i+1);
-    }
-
     /* Loop grande que preenche o resto dos valores */
 
     /* itera a diagonal da matriz do puzzle */
-    for(int diagonal = 2; diagonal < puzzle_size; diagonal ++){
+    for(int diagonal = 1; diagonal < puzzle_size; diagonal ++){
 
         /* itera a linha na diagonal */
         for(int line = 0; line + diagonal < puzzle_size; line ++){
@@ -119,7 +116,6 @@ int main(){
                         //vector<int> cell_values = values_table[line][column][0];
                         if(!any_of(values_table[line][column][0].begin(), values_table[line][column][0].end(), [value](int x){ return x == value;})){
                             current_values.push_back(value);
-                            //vector<int> &trace_info = values_table[line][column][1];
                             current_info.push_back(left_value);
                             current_info.push_back(right_value);
                             current_info.push_back(column - table_searcher + 1);
