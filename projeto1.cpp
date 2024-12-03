@@ -88,7 +88,7 @@ int main(){
             int column = diagonal + line;
 
             /* itera sobre as linhas e colunas para calcular o resultado da celula */
-            for(int table_searcher = 1; table_searcher <= diagonal; table_searcher++){
+            for(int table_searcher = 1; table_searcher <= diagonal && (int) values_table[line][column][0].size() <= matrix_size; table_searcher++){
 
                 /* vão ser cada célula das linhas e colunas da célula que queremos calcular */
                 vector<int> line_cell = values_table[line][column-table_searcher][0];
