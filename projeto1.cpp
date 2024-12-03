@@ -12,7 +12,7 @@ string trc(const vector<vector<vector<vector<int>>>>& matrix,
             bool left, vector<int>& seq) {
     if (i==j) {
         if (left) {return to_string(seq[j-1]);}
-        else {return to_string(seq[j-1]) + ")";}
+        else {return to_string(seq[j-1]);}
     }
     vector<int> values = matrix[i-1][j-1][0];
     vector<int> b = matrix[i-1][j-1][1];
@@ -24,7 +24,7 @@ string trc(const vector<vector<vector<vector<int>>>>& matrix,
     int right_value = b[3*(x-1)+1];
     int bracket = b[3*(x-1)+2];
     return "(" + trc(matrix, left_value, ans, i, bracket, true, seq) + " " + 
-        trc(matrix, right_value, ans, bracket+1, j, false, seq);
+        trc(matrix, right_value, ans, bracket+1, j, false, seq) + ")";
 
 }
 
@@ -110,17 +110,13 @@ int main(){
                             //vector<int> &trace_info = values_table[line][column][1];
                             values_table[line][column][1].push_back(left_value);
                             values_table[line][column][1].push_back(right_value);
-                            values_table[line][column][1].push_back(column);
+                            values_table[line][column][1].push_back(column - table_searcher + 1);
                         }
                         /* verifica se o resultado final é sasfeito*/
                         if(diagonal == puzzle_size-1 && value == intended_result){
                             //printf("YAY, chegaste ao resultado:\n");
                             output = true;
                         }
-                        /*else if (diagonal == puzzle_size-1 && value != intended_result) {
-                            cout << 0 << endl;
-                            return 0;
-                        }*/
                     }
                 }
             }
