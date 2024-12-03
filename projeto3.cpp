@@ -119,7 +119,6 @@ int main(){
                         vector<int> &cell_values = values_table[line][column][0];
                         if(!any_of(cell_values.begin(), cell_values.end(), [value](int x){ return x == value;})){
                             current_values.push_back(value);
-                            //vector<int> &trace_info = values_table[line][column][1];
                             current_info.push_back(left_value);
                             current_info.push_back(right_value);
                             current_info.push_back(column - table_searcher + 1);
