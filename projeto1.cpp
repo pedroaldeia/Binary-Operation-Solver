@@ -6,7 +6,6 @@
 
 using namespace std;
 
-char FILENAME[13] = "filename.txt";
 int BUFFER = 256;
 
 string trc(const vector<vector<vector<vector<int>>>>& matrix,
@@ -46,6 +45,9 @@ int main(){
 
     vector<int> puzzle(puzzle_size);
 
+    vector<bool> num_in_cell;
+    for(int i = 0; i <= matrix_size; i++) num_in_cell.push_back(false);
+
     /* preenche a matriz com os valores dados no input */
     for(int i = 0; i < matrix_size; i++){
         int j = 0;
@@ -62,6 +64,11 @@ int main(){
 
     cin >> intended_result; /* o resultado pretendido no puzzle */
     //auto start = std::chrono::high_resolution_clock::now();
+    if (puzzle.size() == 1 && puzzle[0] == intended_result) {
+        cout << 1 <<endl;
+        cout << puzzle[0] << endl;
+        return 0;
+    }
 
     /* A tabela do puzzle tem 3 dimensões, duas de posição, uma para guardar os valores possíveis */
     vector<vector<vector<vector<int>>>> values_table(
@@ -72,18 +79,10 @@ int main(){
     /* Preenche os valores da maior diagonal com o próprio número */
     for(int i=0; i < puzzle_size; i++) values_table[i][i][0].push_back(puzzle[i]);
 
-    /* Preenche os valores da segunda diagonal com os valores da tabela */
-    for(int i=0; i < puzzle_size -1; i++) {
-        values_table[i][i+1][0].push_back(matrix[puzzle[i]-1][puzzle[i+1]-1]);
-        values_table[i][i+1][1].push_back(puzzle[i]);
-        values_table[i][i+1][1].push_back(puzzle[i+1]);
-        values_table[i][i+1][1].push_back(i+1);
-    }
-
     /* Loop grande que preenche o resto dos valores */
 
     /* itera a diagonal da matriz do puzzle */
-    for(int diagonal = 2; diagonal < puzzle_size; diagonal ++){
+    for(int diagonal = 1; diagonal < puzzle_size; diagonal ++){
 
         /* itera a linha na diagonal */
         for(int line = 0; line + diagonal < puzzle_size; line ++){
@@ -96,7 +95,7 @@ int main(){
             vector<int> &current_info = current_cell[1];
 
             /* itera sobre as linhas e colunas para calcular o resultado da celula */
-            for(int table_searcher = 1; table_searcher <= diagonal && (int) values_table[line][column][0].size() <= matrix_size; table_searcher++){
+            for(int table_searcher = 1; table_searcher <= diagonal && (int) values_table[line][column][0].size() < matrix_size; table_searcher++){
 
                 /* vão ser cada célula das linhas e colunas da célula que queremos calcular */
                 vector<int> line_cell = values_table[line][column-table_searcher][0];
@@ -106,32 +105,32 @@ int main(){
                 
 
                 /* itera sobre os valores contidos na célula da mesma linha */
-                for(int line_values_iterator = 0; line_values_iterator < line_cell_size && (int) current_values.size() <= matrix_size && !output; line_values_iterator++){
+                for(int line_values_iterator = 0; line_values_iterator < line_cell_size && (int) current_values.size() < matrix_size && !output; line_values_iterator++){
 
                     /* itera sobre os valores contidos na célula da mesma coluna */
-                    for(int col_values_iterator = 0; col_values_iterator < column_cell_size && (int) current_values.size() <= matrix_size && !output; col_values_iterator++){
+                    for(int col_values_iterator = 0; col_values_iterator < column_cell_size && (int) current_values.size() < matrix_size && !output; col_values_iterator++){
                         /* calcula o novo valor da célula */
                         int left_value = line_cell[line_values_iterator];
                         int right_value = column_cell[col_values_iterator];
                         int value = matrix[left_value-1][right_value-1];
                         
                         /* verifica se o valor já está contido no vetor de soluções da célula */
-                        //vector<int> cell_values = values_table[line][column][0];
-                        if(!any_of(values_table[line][column][0].begin(), values_table[line][column][0].end(), [value](int x){ return x == value;})){
+                        if(!num_in_cell[value]){
                             current_values.push_back(value);
-                            //vector<int> &trace_info = values_table[line][column][1];
+                            num_in_cell[value] = true;
+
                             current_info.push_back(left_value);
                             current_info.push_back(right_value);
                             current_info.push_back(column - table_searcher + 1);
                         }
                         /* verifica se o resultado final é sasfeito*/
                         if(diagonal == puzzle_size-1 && value == intended_result){
-                            //printf("YAY, chegaste ao resultado:\n");
                             output = true;
                         }
                     }
                 }
             }
+        for(int v : current_cell[0]) num_in_cell[v] = false;
         }
     }
 
@@ -147,4 +146,4 @@ int main(){
     //std::cout << "Elapsed time: " << elapsed.count() << " seconds\n";
     return 0;
 }
-//blablabla
+//blablablablabalbablablabablalba
