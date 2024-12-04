@@ -1,0 +1,107 @@
+** Aqui vai estar o relatório (depois temos de passar para word e pdf) **
+
+    DESCRIÇÃO DO PROBLEMA E DA SOLUÇÃO
+
+    Neste problema, foi nos proposto o desenvolvimento de um método para resolver o seguinte puzzle:
+        -temos à partida uma matriz de tamanho NxN, uma sequência de M números e um resultado pretendido;
+        -uma operação entre dois números da sequência vai buscar o número presente na célula de linha e coluna
+        correspondentes aos números dados;
+        -após a operação, podemos substituir os números utilizados na operação pelo resultado da operação,
+        obtendo um sub problema mais pequeno;
+        -o objetivo é chegar a uma prioridade de operações que nos permite ter o resultado pretendido como
+        resultado final, para simbolizar essa prioridade colocamos parêntesis;
+        -em caso de empate entre as várias operações, o resultado final deverá ser o que dá prioridade às 
+        operações mais à esquerda.
+    Para a resolução deste problema, criámos uma matriz MxM em que cada célula corresponde a um subproblema do
+    puzzle. Tendo as operações atómicas e resolvendo em sentido crescente de tamanho de subproblemas, 
+    descobrimos que era possível descrever cada subproblema (e, consequentemente, o problema inicial) através
+    dos subproblemas anteriormente resolvidos. Desta forma, o cálculo de uma solução é muito mais eficiente do 
+    que simplesmente calcular sucessivamente os mesmos subproblemas.
+
+    PSEUDO-CÓDIGO
+
+    main(){
+
+        // leitura dos valores iniciais //
+
+        let T be a matrix of size NxN
+        let P be a vector of integers of size M
+        let VT be a matrix of vectors of vectors of integers of size MxM
+        let out be a boolean variable equal to false //will be switched to true if we find an answer
+        let num_in_cell be a vector of booleans
+
+        for i=0 to N-1          //<--- O((N-1)²) = O(N²)
+            for j=0 to N-1
+                let t[i][j] be a number given in the input
+
+        for i=0 to M-1          //<--- O(M-1) = O(M)
+            let P[i] be a number given in the input
+        
+        let R be a number given in the input (the intended result!)
+
+        for i to N              //<--- O(N)
+            let num_in_cell[i] be false
+
+        for i=0 to M-1          //<--- O(M-1) = O(M)
+            let T[i][i] be P[i]
+
+        for d=1 to M-1          //<--- O(M-1)*O(MN³) = O(M)*O(MN³) = O(M²N³)  
+        
+            for l=0 to M-d-1    //<--- O(M-d-1)*O(N³) = O(M)*O(N³) = O(MN³)
+
+                let c be M+d
+                let current_cell be VT[l][c]
+                let current_values be current_cell[0]
+                let current_info be current_cell[1]
+
+                for (ts=1 to d) and (current_values.size() < N) //O(N)*O(N²) = O(N³)
+
+                    let line_cell_values be VT[l][c-ts][0]
+                    let column_cell_values be VT[c-ts+1][c][0]
+                    let line_cell_size be line_cell_values.size()
+                    let column_cell_size be column_cell_values.size()
+
+                    for (li=0 to line_cell_size) and (out is false) and (current_values.size()<N) //O(N)*O(N) = O(N²)
+
+                        for (ci=0 to column_cell_size) and (out is false) and (current_values.size()<N) //O(N)
+
+                            let left_value be line_cell_values[li]
+                            let right_value be column_cell_values[ci]
+                            let v be T[left_value][right_value]
+                            
+                            if num_in_cell[v] is false
+                                add v to the back of current_values
+                                num_in_cell[v] = true
+
+                                add left_value to the back of current_info
+                                add right_value to the bakc of current_info
+                                add (c - ts + 1) to the back of current_info
+
+                            if d=M-1 and v=R
+                                out = true
+                            
+            for i in current_values
+                num_in_cell[i] = false
+        
+
+        if output is false  
+            print 0
+            return
+        
+        print 1 + endl
+        print trc(VT, R, "", 1, M, true, P) //O de não sei diz me tu tiago!!!
+
+        return
+    }
+
+    trc()
+
+    
+
+
+                            
+
+
+
+
+
