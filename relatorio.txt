@@ -45,29 +45,34 @@
         for i=0 to M-1          //<--- O(M-1) = O(M)
             let T[i][i] be P[i]
 
-        for d=1 to M-1          //<--- O(M-1)*O(M²N²) = O(M)*O(M²N²) = O(M³N²)  
+        for d=1 to M-1          //<--- O(M-1)*O(M²N²) = O(M)*O(M²N²) = O(M³N²)
         
             for l=0 to M-d-1    //<--- O(M-d-1)*O(MN²) = O(M)*O(MN²) = O(M²N²)
 
-                let c be M+d
-                let current_cell be VT[l][c]
-                let current_values be current_cell[0]
-                let current_info be current_cell[1]
+                c = M+d
+                current_cell = VT[l][c]
+                current_values = current_cell[0]
+                current_info = current_cell[1]
 
                 for (ts=1 to d) and (current_values.size() < N) //O(M)*O(N²) = O(MN²)
+                                                                porque d varia entre 0 e M-1
+                                                                logo O(d) = O(M-1) = O(M)
 
-                    let line_cell_values be VT[l][c-ts][0]
-                    let column_cell_values be VT[c-ts+1][c][0]
-                    let line_cell_size be line_cell_values.size()
-                    let column_cell_size be column_cell_values.size()
+                    line_cell_values = VT[l][c-ts][0]
+                    column_cell_values = VT[c-ts+1][c][0]
+                    line_cell_size = line_cell_values.size()
+                    column_cell_size = column_cell_values.size()
 
                     for (li=0 to line_cell_size) and (out is false) and (current_values.size()<N) //O(N)*O(N) = O(N²)
+                                                                                                    porque o tamanho do
+                                                                                                    vetor de resultados da
+                                                                                                    célula é no máximo N
 
-                        for (ci=0 to column_cell_size) and (out is false) and (current_values.size()<N) //O(N)
+                        for (ci=0 to column_cell_size) and (out is false) and (current_values.size()<N) //O(N) mesma razão de cima
 
-                            let left_value be line_cell_values[li]
-                            let right_value be column_cell_values[ci]
-                            let v be T[left_value][right_value]
+                            left_value = line_cell_values[li]
+                            right_value = column_cell_values[ci]
+                            v = T[left_value][right_value]
                             
                             if num_in_cell[v] is false
                                 add v to the back of current_values
