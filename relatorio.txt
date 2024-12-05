@@ -45,16 +45,16 @@
         for i=0 to M-1          //<--- O(M-1) = O(M)
             let T[i][i] be P[i]
 
-        for d=1 to M-1          //<--- O(M-1)*O(MN³) = O(M)*O(MN³) = O(M²N³)  
+        for d=1 to M-1          //<--- O(M-1)*O(M²N²) = O(M)*O(M²N²) = O(M³N²)  
         
-            for l=0 to M-d-1    //<--- O(M-d-1)*O(N³) = O(M)*O(N³) = O(MN³)
+            for l=0 to M-d-1    //<--- O(M-d-1)*O(MN²) = O(M)*O(MN²) = O(M²N²)
 
                 let c be M+d
                 let current_cell be VT[l][c]
                 let current_values be current_cell[0]
                 let current_info be current_cell[1]
 
-                for (ts=1 to d) and (current_values.size() < N) //O(N)*O(N²) = O(N³)
+                for (ts=1 to d) and (current_values.size() < N) //O(M)*O(N²) = O(MN²)
 
                     let line_cell_values be VT[l][c-ts][0]
                     let column_cell_values be VT[c-ts+1][c][0]
